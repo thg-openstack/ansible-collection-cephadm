@@ -44,3 +44,18 @@ cephadm_osd_spec: []
 cephadm_radosgw_services: []
 # Ingress
 cephadm_ingress_services: []
+
+# Temp Bootstrap Config File
+ceph_bootstrap_config_file: ""
+
+# Temp Bootstrap Config Options
+ceph_bootstrap_config_opts: {}
+
+# Enable HA Prometheus
+cephadm_prometheus_ha: false
+
+# Enable HA Grafana
+cephadm_grafana_ha: false
+
+# Enable HA Alertmanager
+cephadm_alertmanager_ha: false

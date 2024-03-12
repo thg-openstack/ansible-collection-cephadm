@@ -73,3 +73,22 @@ placement:
 {{ {"spec": service.spec} | to_nice_yaml(indent=2) }}
 {% endfor %}
 {% endif %}
+{% if cephadm_prometheus_ha | bool %}
+---
+service_type: prometheus
+placement:
+  label: mon
+{% endif %}
+{% if cephadm_grafana_ha | bool %}
+---
+service_type: grafana
+placement:
+  label: mon
+{% endif %}
+{% if cephadm_alertmanager_ha | bool %}
+---
+service_type: alertmanager
+placement:
+  label: mon
+{% endif %}
+

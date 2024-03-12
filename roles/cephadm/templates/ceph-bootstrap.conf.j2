@@ -1,0 +1,7 @@
+{% for section, options in ceph_bootstrap_config_opts.items() %}
+[{{ section }}]
+{% for option, value in options.items() %}
+{% if section != 'global' and 'image' in option %}{{ section }}/cephadm/{{ option }}{% else %}{{ option }}{% endif %} = {{ value }}
+{% endfor %}
+
+{% endfor %}

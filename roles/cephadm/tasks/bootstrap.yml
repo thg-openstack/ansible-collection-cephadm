@@ -1,4 +1,13 @@
 ---
+- name: Write temporary ceph.conf for bootstrap
+  ansible.builtin.template:
+    src: ceph-bootstrap.conf.j2
+    dest: "{{ ceph_bootstrap_config_file }}"
+    owner: root
+    group: root
+    mode: 0640
+  when: ceph_bootstrap_config_file | length > 0
+
 - name: Bootstrap cephadm
   vars:
     mon_ip: "{{ hostvars[inventory_hostname].ansible_facts[cephadm_public_interface].ipv4.address }}"
@@ -15,6 +24,9 @@
          {{ monitoring_stack }}
          {{ dashboard }}
          {{ firewalld }}
+         {% if ceph_bootstrap_config_file | length > 0 %}
+         --config={{ ceph_bootstrap_config_file }}
+         {% endif %}
          --ssh-private-key={{ cephadm_ssh_private_key }}
          --ssh-public-key={{ cephadm_ssh_public_key }}
          {% if cephadm_ssh_user | length > 0 %}
@@ -89,10 +101,3 @@
          ceph orch apply -i /var/run/ceph/cephadm_cluster.yml
   changed_when: true
   become: true
-
-- name: Install ceph cli on mon hosts
-  command:
-    cmd: "cephadm install ceph"
-  become: true
-  changed_when: true
-  when: cephadm_install_ceph_cli

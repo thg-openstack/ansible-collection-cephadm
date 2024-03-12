@@ -40,3 +40,13 @@
     state: "{{ 'latest' if cephadm_package_update | bool else 'present' }}"
     update_cache: true
   become: true
+
+- name: Install ceph cli on mon hosts
+  ansible.builtin.package:
+    name: "ceph-common"
+    state: present
+  become: true
+  changed_when: true
+  when:
+    - cephadm_install_ceph_cli
+    - inventory_hostname in groups['mons']
